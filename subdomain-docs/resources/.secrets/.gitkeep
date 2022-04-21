@@ -1,0 +1,8 @@
+= Secrets
+
+Put FILENAME.token files here. The token files should contain the token only (no new-line at the end of the file).
+
+CAUTION: TODO ... replace with something better (get secrets from bitwarden)
+
+Expected files:
+* digitalocean.token

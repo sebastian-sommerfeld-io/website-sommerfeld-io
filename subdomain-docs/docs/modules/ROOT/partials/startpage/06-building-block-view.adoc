@@ -1,0 +1,89 @@
+== Building Block View / Whitebox Overall System
+[plantuml, rendered-plantuml-image, svg]
+----
+@startuml
+
+skinparam linetype ortho
+skinparam monochrome false
+skinparam componentStyle uml2
+skinparam backgroundColor transparent
+skinparam ArrowColor black
+skinparam FrameBackgroundColor #fff
+skinparam CollectionsBorderColor black
+skinparam ComponentBorderColor black
+skinparam ComponentBackgroundColor #fefece
+skinparam QueueBorderColor black
+skinparam NoteBorderColor Grey
+skinparam NoteBackgroundColor #fdfdfd
+skinparam defaultTextAlignment center
+skinparam activity {
+  FontName Ubuntu
+}
+
+frame w as "www.sommerfeld.io" {
+    collections pages as "Startpage and\nsome other (static)\nwebsite pages"
+}
+frame d as "docs.sommerfeld.io" {
+    component container as "running container" <<container image>>
+}
+frame DockerHub {
+    node image as "sommerfeldio/docs-website\n:latest" <<container image>>
+}
+
+note top of w: Classic webhosting
+note top of d: DigitalOcean
+
+queue pipeline
+database github as "Antora\nConfig\nRepo" <<github>>
+node ui as "UI Bundle"
+
+github -right-> pipeline
+ui ~up~> pipeline
+pipeline -left-> image
+image -up-> container
+
+frame local as "local workstation" {
+    file dev as "local development" <<code>>
+    node devimage as "pegasus/docs-website\n:dev" <<container image>>
+    dev ~up~> github
+    dev -left-> devimage
+}
+
+@enduml
+----
+
+=== DigitalOcean Setup
+. The link:https://www.digitalocean.com[DigitalOcean] config is a link:https://docs.digitalocean.com/products/app-platform[static site app] using my link:https://hub.docker.com/r/sommerfeldio/docs-website[public DockerHub repository].
+. To expose the App under https://docs.sommerfeld.io set up ...
+.. a proper subdomain configuration with my regular DNS provider (my default webspace)
+.. and a link:https://docs.digitalocean.com/products/app-platform/how-to/manage-domains/#option-2-using-a-cname-pointer[domain config using a CNAME Pointer] for DigitalOcean -> go to _link:https://cloud.digitalocean.com/apps/c8dd3f6e-9895-4011-98b9-3ee37b61913b[DigitalOcean Web Console] -> Settings (Tab) -> Domains (Click Edit)_. Add Domain "docs.sommerfeld.io" with "You manage your domain" option.
+.. Then switch to the regular DNS provider and add a new CNAME record with the information from the DigitalOcean config.
+. To re-deploy the App with the latest image from DockerHub, go to link:https://cloud.digitalocean.com/apps/c8dd3f6e-9895-4011-98b9-3ee37b61913b[DigitalOcean Web Console] and select _Actions (DropDown) -> Deploy_
+
+The container serving the static website can be accessed via the public address link:https://docs.sommerfeld.io[docs.sommerfeld.io] or via the address pointing directly to the DigitalOcean components (https://sommerfeldio-docs-website-x3gki.ondigitalocean.app). The DigitalOcean URL is static and is used for the CNAME entry for docs.sommerfeld.io.
+
+.DigitalOcean App Spec
+[source, yaml]
+----
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+domains:
+- domain: docs.sommerfeld.io
+  type: PRIMARY
+name: sommerfeldio-docs-website
+region: fra
+services:
+- http_port: 80
+  image:
+    registry: sommerfeldio
+    registry_type: DOCKER_HUB
+    repository: docs-website
+    tag: stable
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: sommerfeldio-docs-website
+  routes:
+  - path: /
+  source_dir: /
+----

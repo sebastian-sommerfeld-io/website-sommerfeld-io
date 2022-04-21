@@ -1,0 +1,41 @@
+html {
+    font-size: 100%;
+    @media (min-width: 768px) { font-size: 112.5%; }
+}
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 300;
+    padding-bottom: 50px;
+}
+
+section { padding: 2em 0; }
+section.odd { background: #F7F7F7; }
+
+h1, h2, h3, h4, h5, h6 { font-weight: 300; }
+
+.left { text-align: left; }
+.center { text-align: center; }
+.right { text-align: right; }
+
+ul.list { list-style: disc; }
+
+#radar-container { width: 1450px; margin: auto; }
+#radar-container a { text-decoration: none; }
+#radar-container #radar { width: 100%; }
+
+nav a { text-decoration: none; color: #f7f7f7; }
+nav a:hover { color: #f7f7f7; }
+
+nav.global { background: #262626; font-size: .8em; padding: .4em .5em; }
+nav.global a { display: inline-block; text-transform: uppercase; }
+nav.global a:hover { text-decoration: underline; color: #f7f7f7; }
+nav.global a.website-title { display: inline-block; margin-left: 1.5em; }
+nav.global .right a { margin-left: 1.5em; }
+
+header { background: #333; }
+header nav {}
+header nav ul { display: block; margin: 0; padding: 0; }
+header nav ul li { display: inline-block; }
+header nav ul li a { display: block; padding: .5em .75em; font-size: 1.5em; }
+header nav ul li a:hover { background: #2B2B2B; }

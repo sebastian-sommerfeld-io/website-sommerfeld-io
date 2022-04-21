@@ -1,0 +1,8 @@
+.gradle
+.idea
+.vagrant
+logs
+*.log
+node_modules
+target
+*.token

@@ -1,0 +1,5 @@
+= Conventions
+
+include::ROOT:partial$conventions/branching-strategy.adoc[]
+
+include::ROOT:partial$conventions/docker-image-tag.adoc[]

@@ -1,0 +1,22 @@
+= Startpage (sommerfeld.io)
+Sebastian Sommerfeld <sebastian@sommerfeld.io>
+
+include::partial$startpage/01-intro.adoc[]
+
+include::partial$startpage/02-project-name.adoc[]
+
+include::partial$startpage/03-requirements-and-goals.adoc[]
+
+include::partial$startpage/04-install.adoc[]
+
+include::partial$startpage/05-usage.adoc[]
+
+include::partial$startpage/06-building-block-view.adoc[]
+
+include::partial$startpage/07-architecture-decisions.adoc[]
+
+include::partial$startpage/08-technical-risks.adoc[]
+
+include::partial$startpage/10-license.adoc[]
+
+include::partial$startpage/09-contact.adoc[]

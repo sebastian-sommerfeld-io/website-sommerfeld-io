@@ -1,0 +1,2 @@
+== Architecture Decisions
+. The Tech Radar of choice is the one from link:https://engineering.zalando.com/posts/2018/01/building-tech-radar.html[Zalando], not the one from link:https://www.thoughtworks.com/radar[Thoughtworks] because it es easier to bundle a Dockerimage which does not rely on outside information. Plus it looks cleaner and does not come in any predefinec color-theme which breaks the website look-and-feel.

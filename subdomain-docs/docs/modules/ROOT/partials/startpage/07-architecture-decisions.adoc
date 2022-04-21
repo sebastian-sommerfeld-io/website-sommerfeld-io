@@ -1,0 +1,5 @@
+== Architecture Decisions
+. link:https://antora.org[Antora] is the site generator of choice to turn Asciidoc pages into a documentation website. Diagrams are rendered using link:https://kroki.io[Kroki].
+. The released Docker images are hosted on DockerHub (since DockerHub is free to use for public repos). A free Artifactory instance on jfrog.io too limited (space, ...) and shuts down after 2 weeks of inactivity.
+. The cloud provider of choice is link:https://www.digitalocean.com[DigitalOcean] because they offer a simple and straigt forward way to run Docker containers and expose then via a custom (sub-) domain. The big players (AWS, Azure, Google Cloud) are more complicated and (at least slightly) more expensive. Compared to e.g. Linode, link:https://www.digitalocean.com[DigitalOcean] seems to provide a simpler management ui.
+.. Only the docs-page is hosted on link:https://www.digitalocean.com[DigitalOcean]. As of now www.sommerfeld.io does not offer any service other than the docs-page. In the future this might change and the website migh become a hybrid (cloud and classic website hosting).

@@ -1,0 +1,276 @@
+#!/usr/bin/env groovy
+import groovy.json.JsonSlurper
+
+final String KEEP_BUILDS="8"
+
+List<String> projects
+
+/**
+ * Query API from gitlab.com for projects that belong to user X (user is defined implicitly through the access
+ * token) and convert JSON result into list of repositories.
+ *
+ * @return List<String> List of repositories belong to user X
+ * @throws Exception
+ */
+final List<String> readProjectsFromGitlab(final String token) throws Exception {
+    def get = new URL("https://gitlab.com/api/v4/projects?private_token=$token&owned=true").openConnection();
+    def getRC = get.getResponseCode();
+
+    println("HTTP CODE $getRC");
+    if (getRC.equals(200)) {
+        def jsonResponse = get.getInputStream().getText()
+        println(jsonResponse);
+
+        List<String> repos = new JsonSlurper().parseText(jsonResponse).collect {
+            return it.path_with_namespace
+        }
+
+        return repos
+    }
+
+    throw new Exception("Error while querying REST API from gitlab.com or while parsing json result") as java.lang.Throwable
+}
+
+/**
+ * Perform cleanup tasks for this pipeline.
+ */
+def cleanup() {
+    sh "rm -rf /tmp/shdoc"
+    sh "rm -rf ${REPOS_DIR}"
+}
+
+/**
+ * Iterate over list of projects collected in previous stage (see readProjectsFromGitlab()) and create parallel
+ * stages (one stage for each repository).
+ *
+ * The stage for a respective project clones the repository finds all *.sh files inside the workspace and generates
+ * docs for each script.
+ *
+ * Docs creation is done using a combination of command line tools.
+ *
+ * All these steps are skipped, if there is no *.sh present in the repository (= there is no need to generate docs
+ * due to lack of source files).
+ *
+ * @param projectsList List of projects from gitlab.com - see readProjectsFromGitlab()
+ * @return LinkedHashMap All generated stages for parallel execution
+ */
+final LinkedHashMap parallelStages(List<String> projectsList) {
+    LinkedHashMap branchedStages = [:]
+
+    projectsList.each { val ->
+        String project = val
+        String projectName = project.substring(project.lastIndexOf("/") + 1, project.length())
+        String projectTitle = project.replace("/", "__") // human readable for pipeline
+        String commitMessage = "docs: AUTO-GENERATE - bash api docs"
+
+        branchedStages["${project}"] = {
+            stage("build::${project}") {
+
+                echo "Project = ${project}"
+                echo "Project Name = ${projectName}"
+                echo "Project Title = ${projectTitle}"
+
+                sh "mkdir -p ${REPOS_DIR}/${projectTitle}"
+
+                dir("${REPOS_DIR}/${projectTitle}") {
+                    sh "git clone git@gitlab.com:${project}.git"
+                }
+
+                dir("${REPOS_DIR}/${projectTitle}/${projectName}") {
+                    sh "pwd"
+                    sh "ls -alF"
+
+                    echo "[INFO] Iterate project and find *.sh files"
+                    // Needs Plugin: https://plugins.jenkins.io/pipeline-utility-steps/
+                    //def files = findFiles(glob: '**/*.sh', excludes: 'some/*.sh,**/some/other/*.sh')
+                    def files = findFiles(glob: '**/*.sh')
+
+                    if(files) {
+                        echo "[INFO] Clear docs folder '${MODULE_DIR}' (= prepare for generating new bash api docs)"
+                        sh "rm -rf ${MODULE_DIR}"
+
+                        echo "[INFO] Setup directory structure"
+                        sh "mkdir -p ${MODULE_DIR}"
+                        sh "mkdir -p ${MODULE_DIR}/pages"
+
+                        echo "[INFO] Initialize nav.adoc"
+                        sh "touch ${MODULE_DIR}/nav.adoc"
+                        sh "echo '* xref:index.adoc[API Docs: Bash Scripts]' > '${MODULE_DIR}/nav.adoc'"
+
+                        echo "[INFO] Initialize index.adoc"
+                        sh "cp ${env.WORKSPACE}/resources/cicd/GENERATE_bash_api_docs/bash-api-template-index.adoc ${MODULE_DIR}/pages/index.adoc"
+                        sh "echo  >> '${MODULE_DIR}/pages/index.adoc'"
+
+                        echo "[INFO] Iterate files list and generate asciidoc"
+                        files.each { f ->
+                            String adocFileName = f.path.replace("/", "_")
+                            adocFileName = adocFileName.replace(".sh", ".adoc")
+
+                            String mdFileName = f.name.replace(".sh", ".md")
+
+                            println "[INFO] NAME = ${f.name} ... PATH = ${f.path} ... ADOC NAME = ${adocFileName}"
+
+                            sh "shdoc < ${f.path} > ${MODULE_DIR}/pages/${mdFileName}" // Create markdown from bash script
+                            sh "pandoc --atx-headers --verbose --reference-links --wrap=none -s -f markdown -t asciidoc --output ${MODULE_DIR}/pages/${adocFileName} ${MODULE_DIR}/pages/${mdFileName}" // md to adoc
+                            sh "sed -i 's/== /= /' ${MODULE_DIR}/pages/${adocFileName}" // Adjust headlines #1
+                            sh "sed -i 's/== /= /' ${MODULE_DIR}/pages/${adocFileName}" // Adjust headlines #2
+                            sh "sed -i 's/= Overview/== Overview/' ${MODULE_DIR}/pages/${adocFileName}" // Adjust headlines #3
+                            sh "sed -i 's/== Arguments/=== Arguments/' ${MODULE_DIR}/pages/${adocFileName}" // Adjust headlines #4
+                            sh "sed -i 's/==== Arguments/=== Arguments/' ${MODULE_DIR}/pages/${adocFileName}" // Adjust headlines #5
+                            sh "sed -i 's/= Index/== Index/' ${MODULE_DIR}/pages/${adocFileName}" // Adjust headlines #6
+                            sh "sed -i 's/* link:#/* link:#_/' ${MODULE_DIR}/pages/${adocFileName}" // Fix index links in asciidoc file (Pandoc translation not correct)
+
+                            sh "sed -i '2i :page-toclevels: 1' ${MODULE_DIR}/pages/${adocFileName}" // Add Attribute to second line of file
+                            sh "sed -i '2i Jenkins Pipeline <sebastian@sommerfeld.io>' ${MODULE_DIR}/pages/${adocFileName}" // Add Attribute to second line of file again
+
+                            sh "rm ${MODULE_DIR}/pages/${mdFileName}" // Remove Markdown file
+                            sh "echo '** xref:${adocFileName}[${f.path}]' >> '${MODULE_DIR}/nav.adoc'" // Write nav entry to nav file
+                            sh "echo '* xref:${adocFileName}[${f.path}]' >> '${MODULE_DIR}/pages/index.adoc'" // Write nav entry to index file
+
+                            final String ymlEntry = "  - modules/${MODULE_NAME}/nav.adoc".toString()
+                            sh "grep -qxF '${ymlEntry}' docs/antora.yml || echo '${ymlEntry}' >> docs/antora.yml" // Add if not existing
+                        }
+
+                        sh "git add ./*"
+                        sh "git add ."
+                        sh "( git commit -m '$commitMessage' || true )"
+                        sh "( git push || true )"
+                    } else {
+                        echo "[INFO] No *.sh files found -> NO DOCS GENERATED"
+                    }
+                }
+            }
+        }
+    }
+
+    return branchedStages
+}
+
+/**
+ * The pipeline itself
+ */
+pipeline {
+//    agent {
+//        // todo -> docker image for slave agent with all needed software -> SEE v-kube-cluster/.gitlab-ci.yml
+//        docker { image 'ubuntu:20.04' }
+//    }
+
+    agent any
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "$KEEP_BUILDS", artifactNumToKeepStr: "$KEEP_BUILDS"))
+    }
+
+    triggers {
+        // https://crontab.guru/#0_22_*_*_*
+        cron('0 22 * * *')
+    }
+
+    environment {
+        REPOS_DIR = "${env.WORKSPACE}/tmp/repos"
+        MODULE_NAME = "api-docs-bash"
+        MODULE_DIR = "docs/modules/api-docs-bash"
+    }
+
+    stages {
+        stage('verify') {
+            parallel {
+                stage('info') {
+                    steps {
+                        sh 'printenv'
+                        sh "git --version"
+                        echo "Groovy Version = ${GroovySystem.version}"
+                        echo "Workspace Path = ${env.WORKSPACE}"
+                        echo "Repos Dir = ${REPOS_DIR}"
+                        echo "Antora Module Dir = ${MODULE_DIR}"
+                    }
+                }
+                // todo move step to shared library
+                // todo add shared library to jenkins
+                stage("lint::Jenkinsfile") {
+                    agent {
+                        docker {
+                            image "node:latest"
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        // todo create docker image to avoid install for every build
+                        sh '''
+                            apt-get update && apt-get install -y openjdk-11-jre-headless
+                            node --version
+                            npm --version
+                            npm install -g npm-groovy-lint --save
+
+                            pwd
+                            ls
+
+                            npm-groovy-lint
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage("prepare") {
+            parallel {
+                stage("prepare::filesystem") {
+                    steps {
+                        echo "Create repository directory ${REPOS_DIR}"
+                        script {
+                            cleanup()
+                        }
+                        sh "mkdir -p ${REPOS_DIR}"
+                    }
+                }
+                stage("prepare::query-gitlab-api") {
+                    steps {
+                        echo "Curl gitlab API into var to loop over in later stages (auto-generate parallel executions based on repos from API call)"
+
+                        script {
+                            withCredentials([string(credentialsId: 'gitlab-api-token', variable: 'TOKEN')]) {
+                                projects = readProjectsFromGitlab("${TOKEN}")
+                                projects.each { val -> println val }
+                            }
+                        }
+                    }
+                }
+                stage("prepare::install") {
+                    steps {
+                        sh """
+                            apt-get update -qq
+                            apt-get install -y curl
+                            apt-get install -y make
+                            apt-get install -y gawk
+                            
+                            (
+                                cd /tmp || exit
+                                git clone --recursive https://github.com/reconquest/shdoc
+                                cd shdoc || exit
+                                make install
+                            )
+                            
+                            apt-get install -y pandoc
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('build') {
+            steps {
+                script {
+                    parallel parallelStages(projects)
+                }
+            }
+        }
+
+        stage("cleanup") {
+            steps {
+                script {
+                    cleanup()
+                }
+            }
+        }
+    }
+}

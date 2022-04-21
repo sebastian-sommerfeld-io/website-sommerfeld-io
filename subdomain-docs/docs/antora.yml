@@ -1,0 +1,8 @@
+---
+name: website-docs
+title: Website (Docs)
+version: main
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+  - modules/api-docs-bash/nav.adoc

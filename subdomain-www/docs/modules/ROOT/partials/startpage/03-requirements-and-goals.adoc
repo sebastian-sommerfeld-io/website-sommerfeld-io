@@ -1,0 +1,7 @@
+== Requirements Overview
+* Startpage for my website www.sommerfeld.io with a list of my projects (auto-generated) and a link:https://engineering.zalando.com/posts/2018/01/building-tech-radar.html[tech-radar]
+* Use Git as Version Control System
+* Don't add a blog section since this probably would outdate rather soon. Write HowTo / tutorial pages instead of blog posts.
+
+== Quality Goals
+* Update the website automatically (scheduled or via push trigger)

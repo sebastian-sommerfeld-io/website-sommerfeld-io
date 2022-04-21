@@ -1,0 +1,9 @@
+== Docker image:tag convention
+[cols="1,4", options="header"]
+|===
+|Tag |Description
+|dev |Tag representing local development states. Not pushed to link:https://hub.docker.com/u/sommerfeldio[DockerHub]
+|nightly |Unstable nightly build based on work-in-progress code base (available on link:https://hub.docker.com/u/sommerfeldio[DockerHub])
+|stable |Latest stable release (available on link:https://hub.docker.com/u/sommerfeldio[DockerHub])
+|latest |Synonym for stable (available on link:https://hub.docker.com/u/sommerfeldio[DockerHub])
+|===

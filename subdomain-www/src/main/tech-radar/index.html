@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Tech Radar</title>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="assets/radar.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/reset.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body>
+
+<!--    <nav class="global">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="col-8"><a class="website-title" href="https://www.sommerfel.io">SOMMERFELD.IO</a></div>-->
+<!--                <div class="col-4 right">-->
+<!--                    <a href="https://github.com/sebastian-sommerfeld-io">Github</a>-->
+<!--                    <a href="https://hub.docker.com/u/sommerfeldio">DockerHub</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+
+<!--    <header>-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <nav class="col-12">-->
+<!--                    <ul>-->
+<!--                        <li><a href="https://www.sommerfeld.io">Home</a></li>-->
+<!--                        <li><a href="https://docs.sommerfeld.io">Docs</a></li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </header>-->
+
+    <section id="radar-container">
+        <svg id="radar"></svg>
+
+        <script>
+            radar_visualization({
+                svg_id: "radar",
+                width: 1450,
+                height: 900,
+                colors: {
+                    background: "#fff",
+                    grid: "#bbb",
+                    inactive: "#ddd"
+                },
+                title: "Tech Radar",
+                quadrants: [
+                    { name: "Platforms" },
+                    { name: "Cloud, Hosting, IaC, etc." },
+                    { name: "(Development) Tools" },
+                    { name: "Misc" },
+                ],
+                rings: [
+                    { name: "IN USE", color: "#93c47d" },
+                    { name: "TRIAL", color: "#93d2c2" },
+                    { name: "ASSESS", color: "#fbdb84" },
+                    { name: "HOLD", color: "#efafa9" }
+                ],
+                print_layout: true,
+                // zoomed_quadrant: 0,
+                //ENTRIES
+                entries: [
+                    { "quadrant": 0, "ring": 0, "active": true, "moved": 0, "label": "Docker" },
+                    { "quadrant": 0, "ring": 2, "active": true, "moved": 0, "label": "Kubernetes" },
+                    { "quadrant": 0, "ring": 0, "active": true, "moved": 0, "label": "RaspberryPi" },
+                    { "quadrant": 0, "ring": 1, "active": true, "moved": 0, "label": "Proxmox" },
+                    { "quadrant": 0, "ring": 3, "active": true, "moved": 0, "label": "VMWare" },
+                    { "quadrant": 0, "ring": 2, "active": true, "moved": 0, "label": "Dell Server Blade" },
+                    { "quadrant": 0, "ring": 2, "active": true, "moved": 0, "label": "OpenShift" },
+                    { "quadrant": 1, "ring": 0, "active": true, "moved": 0, "label": "DigitalOcean Apps" },
+                    { "quadrant": 1, "ring": 0, "active": true, "moved": 0, "label": "Github.com" },
+                    { "quadrant": 1, "ring": 0, "active": true, "moved": 0, "label": "Gitlab.com" },
+                    { "quadrant": 1, "ring": 2, "active": true, "moved": 0, "label": "Terraform" },
+                    { "quadrant": 1, "ring": 2, "active": true, "moved": 0, "label": "Ansible" },
+                    { "quadrant": 1, "ring": 2, "active": true, "moved": 0, "label": "Chef" },
+                    { "quadrant": 1, "ring": 2, "active": true, "moved": 0, "label": "Chef InSpec" },
+                    { "quadrant": 1, "ring": 0, "active": true, "moved": 0, "label": "DockerHub.com" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "Vagrant" },
+                    { "quadrant": 2, "ring": 2, "active": true, "moved": 0, "label": "Git" },
+                    { "quadrant": 2, "ring": 1, "active": true, "moved": 0, "label": "Jenkins" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "Asciidoc" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "Antora" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "PlantUML" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "Kroki.io" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "shellcheck" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "yamllint" },
+                    { "quadrant": 2, "ring": 0, "active": true, "moved": 0, "label": "Node + NPM" }
+                ]
+                //ENTRIES
+            });
+        </script>
+    </section>
+
+    <section class="odd">
+        <div class="container">
+            <h2>What is the Tech Radar?</h2>
+            <p>The Tech Radar is a list of technologies, complemented by an assessment result, called <em>ring assignment</em>. I use four rings with the following semantics:</p>
+            <ul class="list">
+                <li><strong>IN USE</strong> - Technologies I use for my development purposes or to serve my website of for anything tech-related. These technologies form the toolbox from which I try to tacke all my projects.</li>
+                <li><strong>TRIAL</strong> - Technologies that I started to use in a single project or limited usecase. Mostly this means I am learning about this technology with some real issues and tasks and not just on a hello-world-level.</li>
+                <li><strong>ASSESS</strong> - Technologies that are promising and have clear potential to invest some research and prototyping efforts in to see if it has impact. Mostly this means I am learning about this technology through its documentation or on a hello-world-level.</li>
+                <li><strong>HOLD</strong> - Technologies not recommended to be used for new projects. Technologies I decided not to use for various reasons. In most cases there is an Architecture Desicion Record explaining this decision in detail.</li>
+            </ul>
+        </div>
+    </section>
+
+</body>
+</html>

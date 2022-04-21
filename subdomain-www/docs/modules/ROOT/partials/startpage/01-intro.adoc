@@ -1,0 +1,12 @@
+:project-name: website
+:url-project: https://github.com/sebastian-sommerfeld-io/{project-name}
+
+This repository contains the complete website for link:https://www.sommerfeld.io[www.sommerfeld.io].
+
+[cols="1,4", options="header"]
+|===
+|What |Where to find
+|Repository |{url-project}-sommerfeld-io
+|Container Registry |https://hub.docker.com/r/sommerfeldio/website
+|Documentation |https://docs.sommerfeld.io/{project-name}-www/main
+|===

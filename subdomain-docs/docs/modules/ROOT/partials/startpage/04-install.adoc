@@ -1,0 +1,7 @@
+== Install
+In order to run this project on your machine, the following dependencies must be met:
+
+. Install Docker
+. Install node and npm
+.. Install Antora -> `npm install --global @antora/cli@2.3 @antora/site-generator-default@2.3`
+.. Install Gulp -> `npm install --global gulp-cli`

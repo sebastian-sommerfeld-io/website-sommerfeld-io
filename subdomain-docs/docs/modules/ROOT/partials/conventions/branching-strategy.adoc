@@ -1,0 +1,6 @@
+== Git Branching Strategy
+
+* main (deprecated: master) -> The main branch representing the codebase running in production
+* feat/NAME -> Feature branch
+* bugfix/NAME -> Bugfix branch
+* adr/NAME -> Branch dedicated to an Architecture Desicion Record

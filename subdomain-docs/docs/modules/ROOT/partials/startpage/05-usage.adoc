@@ -1,0 +1,6 @@
+== Usage
+To build and run this project on your local machine you have to ...
+
+. ... install all node depencencies using `install-node-modules.sh`.
+. ... invoke `run.sh` to build the docs and start a local Docker container which serves the docs page on port 7888.
+. ... invoke `deploy.sh` to re-tag the image build by `run.sh`, deploy the image to DockerHub and update the DigitalOcean app with the latest image version from DockerHub.

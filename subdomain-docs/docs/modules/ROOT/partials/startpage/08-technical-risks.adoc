@@ -1,0 +1,8 @@
+== Risks and Technical Debts
+Scale for Probability and Impact: Low, Medium and High
+
+[cols="^1,2,5a,1,1,5a", options="header"]
+|===
+|# |Title |Description |Probability |Impact |Response
+|{counter:usage} |CICD |As of now there is no CICD pipeline. The published website is a re-tagged version of the local development docker container. The production playbooks are not used. |high |medium |This page and its environment are work in progress. Pipelines and dedicatedmages are planned. link:https://sommerfeld-io.atlassian.net/browse/SIO-156[SIO-156]
+|===

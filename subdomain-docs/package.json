@@ -1,0 +1,36 @@
+{
+  "name": "www.sommerfeld.io",
+  "version": "1.0.0",
+  "description": "build static site using antora",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Error: specify docs or blog\" && exit 1",
+    "build:blog-test": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr antora generate playbook-blog-test.yml --stacktrace --generator antora-site-generator-lunr --clean --fetch",
+    "build:docs-test": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr antora generate playbook-docs-test.yml --stacktrace --generator antora-site-generator-lunr --clean --fetch",
+    "build:blog-release": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr antora generate playbook-blog-release.yml --stacktrace --generator antora-site-generator-lunr --clean --fetch",
+    "build:docs-release": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr antora generate playbook-docs-release.yml --stacktrace --generator antora-site-generator-lunr --clean --fetch",
+    "build:blog-prod": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr antora generate playbook-blog-prod.yml --stacktrace --generator antora-site-generator-lunr --clean --fetch",
+    "build:docs-prod": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr antora generate playbook-docs-prod.yml --stacktrace --generator antora-site-generator-lunr --clean --fetch"
+  },
+  "keywords": [
+    "antora",
+    "sommerfeld.io",
+    "docs-as-code"
+  ],
+  "author": "Sebastian Sommerfeld",
+  "devDependencies": {
+    "@antora/cli": "^2.0.0",
+    "@antora/site-generator-default": "^2.0.0",
+    "@asciidoctor/core": "^2.0.0",
+    "asciidoctor-kroki": "^0.7.0"
+  },
+  "private": true,
+  "dependencies": {
+    "antora-lunr": "^0.6.0",
+    "antora-site-generator-lunr": "^0.4.0",
+    "gulp": "^4.0.2",
+    "mkdirp": "^1.0.4",
+    "reveal.js": "^4.2.1"
+  }
+}

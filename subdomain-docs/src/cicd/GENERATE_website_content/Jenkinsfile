@@ -1,0 +1,92 @@
+#!/usr/bin/env groovy
+
+final String KEEP_BUILDS="8"
+
+/**
+ * The actual pipeline
+ */
+pipeline {
+    agent {
+        // todo ... better image??? smaller image when no additional software is needed (alpine)???
+        docker { image "node:16-bullseye" } // bullseye = debian 11
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "$KEEP_BUILDS", artifactNumToKeepStr: "$KEEP_BUILDS"))
+    }
+
+    triggers {
+        //   earlier than 4am - pipeline should be finished when deploy jobs are triggered
+        // https://crontab.guru/#10_3_*_*_*
+        cron('0 2 * * *')
+    }
+
+    stages {
+        stage("verify") {
+            parallel {
+                stage('info') {
+                    steps {
+                        sh 'printenv'
+                        sh "whoami"
+                        echo "Running on Node ${NODE_LABELS}"
+                        echo "Workspace = ${WORKSPACE}"
+                        echo "node --version"
+                        echo "npm --version"
+                    }
+                }
+                stage("lint::something") {
+                    steps {
+                        echo "todo ..." // todo ...
+                    }
+                }
+            }
+        }
+
+        stage("prepare") {
+            parallel {
+                stage("prepare::something") {
+                    steps {
+                        echo "todo ..." // todo ...
+                    }
+                }
+                stage("prepare::something-else") {
+                    steps {
+                        echo "todo ..." // todo ...
+                    }
+                }
+            }
+        }
+
+        stage("build") {
+            parallel {
+                stage("blog::generate-asciidoc") {
+                    steps {
+                        echo "todo ..." // todo ...
+                        echo "Generate Gitlab Project Summary Page" // todo ...
+                    }
+                }
+                stage("blog::generate-something") {
+                    steps {
+                        echo "todo ..." // todo ...
+                    }
+                }
+            }
+        }
+
+
+        stage("deploy") {
+            parallel {
+                stage("deploy::commit-push") {
+                    steps {
+                        echo "todo ..." // todo ...
+                    }
+                }
+                stage("deploy::something-else") {
+                    steps {
+                        echo "todo ..." // todo ...
+                    }
+                }
+            }
+        }
+    }
+}
