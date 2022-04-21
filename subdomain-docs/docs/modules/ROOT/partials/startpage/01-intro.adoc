@@ -1,4 +1,4 @@
-:project-name: website-docs
+:project-name: website
 :url-project: https://github.com/sebastian-sommerfeld-io/{project-name}
 
 This repository contains the complete website for link:https://docs.sommerfeld.io[www.sommerfeld.io].
@@ -6,7 +6,7 @@ This repository contains the complete website for link:https://docs.sommerfeld.i
 [cols="1,4", options="header"]
 |===
 |What |Where to find
-|Repository |{url-project}
+|Repository |{url-project}-sommerfeld-io
 |Container Registry |https://hub.docker.com/r/sommerfeldio/docs-website
-|Documentation |https://docs.sommerfeld.io/{project-name}/main
+|Documentation |https://docs.sommerfeld.io/{project-name}-docs/main
 |===

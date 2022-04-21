@@ -1,7 +1,7 @@
 :project-name: website
 :url-project: https://github.com/sebastian-sommerfeld-io/{project-name}
 
-This repository contains the complete website for link:https://www.sommerfeld.io[www.sommerfeld.io].
+This repository contains the complete website for link:https://docs.sommerfeld.io[www.sommerfeld.io].
 
 [cols="1,4", options="header"]
 |===
