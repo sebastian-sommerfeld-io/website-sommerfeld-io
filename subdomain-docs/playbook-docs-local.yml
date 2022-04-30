@@ -27,8 +27,8 @@ asciidoc:
     - asciidoctor-kroki
 ui:
   bundle:
-    # url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
-    url: ../../../sommerfeld-io/ui-bundle-docs/target/build/ui-bundle.zip
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+    # url: ../../../sommerfeld-io/ui-bundle-docs/target/build/ui-bundle.zip
     snapshot: true
 output:
   clean: true

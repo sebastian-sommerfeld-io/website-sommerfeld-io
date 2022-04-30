@@ -2,23 +2,11 @@
 site:
   title: sommerfeld.io Docs
   url: http://localhost:7888
-  start_page: kobol-docs::index.adoc
+  start_page: ui-bundle-docs-docs::index.adoc
   robots: allow
 content:
   branches: HEAD
   sources:
-    - url: ../../../sommerfeld.sebastian/docker-jenkins
-      start_path: docs
-    - url: ../../../sommerfeld.sebastian/kobol
-      start_path: docs
-    - url: ../../../sommerfeld.sebastian/marvin
-      start_path: docs
-    - url: ../../../sommerfeld.sebastian/raspi-config
-      start_path: docs
-    - url: ../../../sommerfeld.sebastian/v-kube-cluster
-      start_path: docs
-    - url: ../../kobol-config
-      start_path: docs
     - url: ../../../sommerfeld-io/ui-bundle-docs
       start_path: docs
 asciidoc:
@@ -29,8 +17,8 @@ asciidoc:
     - asciidoctor-kroki
 ui:
   bundle:
-    # url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
-    url: ../../../sommerfeld-io/ui-bundle-docs/target/build/ui-bundle.zip
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+    # url: ../../../sommerfeld-io/ui-bundle-docs/target/build/ui-bundle.zip
     snapshot: true
 output:
   clean: true
