@@ -3,9 +3,10 @@ ls:
   .adoc: kebab-case | SCREAMING_SNAKE_CASE
   .puml: kebab-case
 
+  .json: kebab-case
+  .tf: kebab-case
   .yml: kebab-case
   .yaml: kebab-case
-  .json: kebab-case
 
   .sh: kebab-case
 
