@@ -19,14 +19,14 @@ ls:
   Jenkinsfile: PascalCase
 
   .env: lowercase
-  .folderslint: lowercase
   .gitignore: lowercase
   .gitkeep: lowercase
-  .yamllint: lowercase
 
 ignore:
+  - .directoryvalidator.json
   - .ls-lint.yml
   - .yamllint.yml
+  - resources/common-assets/linters/.directoryvalidator.json
   - resources/common-assets/linters/.ls-lint.yml
   - resources/common-assets/linters/.yamllint.yml
   - .idea
