@@ -31,6 +31,7 @@ ui:
     url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
     # url: https://sommerfeld.jfrog.io/artifactory/default-generic-local/dev/sommerfeld/ui/ui-bundle-docs/ui-bundle-docs-SNAPSHOT.zip
     snapshot: true
+  supplemental_files: ./src/main/supplemental-ui
 output:
   clean: true
   dir: ./target/docs/public
