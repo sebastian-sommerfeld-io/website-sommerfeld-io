@@ -20,12 +20,12 @@
 
 DOCKER_SRC_IMAGE="pegasus/docs-website:dev"
 DOCKER_TARGET_IMAGE="sommerfeldio/docs-website"
-DO_TARGET_APP_NAME="sommerfeldio-docs-website"
+#DO_TARGET_APP_NAME="sommerfeldio-docs-website"
 DO_SECRETS_FILE="resources/.secrets/digitalocean.token"
 
 
 echo -e "$LOG_INFO Read DigitalOcean token from '$DO_SECRETS_FILE'"
-DO_API_TOKEN=$(cat "$DO_SECRETS_FILE")
+#DO_API_TOKEN=$(cat "$DO_SECRETS_FILE")
 
 echo -e "$LOG_INFO Deploy image $DOCKER_TARGET_IMAGE to DockerHub"
 
@@ -50,22 +50,22 @@ docker pull "$DOCKER_TARGET_IMAGE:latest"
 
 echo -e "$LOG_DONE Finished deployment of $DOCKER_TARGET_IMAGE to DockerHub"
 
-echo -e "$LOG_INFO Deploy latest image to DigitalOcean"
-
-echo -e "$LOG_INFO Read all apps with name and id from DigitalOcean"
-apps=$(docker run --rm -it --env=DIGITALOCEAN_ACCESS_TOKEN="$DO_API_TOKEN" digitalocean/doctl:latest apps list --format ID,Spec.Name --no-header)
-
-echo -e "$LOG_INFO Update DigitalOcean app '$DO_TARGET_APP_NAME' (deploy latest version from DockerHub)"
-echo -e "$LOG_INFO Iterate apps"
-while IFS= read -r line
-do
-  if [[ "$line" == *"$DO_TARGET_APP_NAME"* ]]; then
-    id="${line:0:36}"
-    echo -e "$LOG_INFO     Found target app '$DO_TARGET_APP_NAME'"
-    echo -e "$LOG_INFO     Deployment = $line"
-    echo -e "$LOG_INFO         App ID = $id"
-    docker run --rm -i --env=DIGITALOCEAN_ACCESS_TOKEN="$DO_API_TOKEN" digitalocean/doctl:latest apps create-deployment "$id" --force-rebuild --wait
-  fi
-done < <(printf '%s\n' "$apps")
-
-echo -e "$LOG_DONE Updated DigitalOcean app '$DO_TARGET_APP_NAME' (deploy latest version from DockerHub)"
+#echo -e "$LOG_INFO Deploy latest image to DigitalOcean"
+#
+#echo -e "$LOG_INFO Read all apps with name and id from DigitalOcean"
+#apps=$(docker run --rm -it --env=DIGITALOCEAN_ACCESS_TOKEN="$DO_API_TOKEN" digitalocean/doctl:latest apps list --format ID,Spec.Name --no-header)
+#
+#echo -e "$LOG_INFO Update DigitalOcean app '$DO_TARGET_APP_NAME' (deploy latest version from DockerHub)"
+#echo -e "$LOG_INFO Iterate apps"
+#while IFS= read -r line
+#do
+#  if [[ "$line" == *"$DO_TARGET_APP_NAME"* ]]; then
+#    id="${line:0:36}"
+#    echo -e "$LOG_INFO     Found target app '$DO_TARGET_APP_NAME'"
+#    echo -e "$LOG_INFO     Deployment = $line"
+#    echo -e "$LOG_INFO         App ID = $id"
+#    docker run --rm -i --env=DIGITALOCEAN_ACCESS_TOKEN="$DO_API_TOKEN" digitalocean/doctl:latest apps create-deployment "$id" --force-rebuild --wait
+#  fi
+#done < <(printf '%s\n' "$apps")
+#
+#echo -e "$LOG_DONE Updated DigitalOcean app '$DO_TARGET_APP_NAME' (deploy latest version from DockerHub)"
