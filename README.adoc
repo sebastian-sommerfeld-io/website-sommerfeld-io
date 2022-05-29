@@ -9,6 +9,6 @@ This repository contains the complete website for link:https://www.sommerfeld.io
 |What |Where to find
 |Repository |{url-project}-sommerfeld-io
 |Container Registry |https://hub.docker.com/r/sommerfeldio/website + https://hub.docker.com/r/sommerfeldio/docs-website
-|Documentation |https://docs.sommerfeld.io/{project-name}-www/main
+|Documentation |https://docs.cloud.sommerfeld.io/{project-name}-www/main
 |===
 
