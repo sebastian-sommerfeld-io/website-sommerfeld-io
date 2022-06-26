@@ -11,6 +11,8 @@ content:
       start_path: subdomain-docs/docs
     - url: ../../website-sommerfeld-io
       start_path: subdomain-www/docs
+    - url: ../../docker-images
+      start_path: docs
     - url: ../../infrastructure
       start_path: docs
     - url: ../../playgrounds

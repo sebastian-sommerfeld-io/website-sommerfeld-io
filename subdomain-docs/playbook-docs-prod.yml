@@ -13,6 +13,8 @@ content:
       start_path: subdomain-www/docs
     - url: https://gitlab.com/sommerfeld.sebastian/prometheus-grafana.git
       start_path: docs
+    - url: https://github.com/sebastian-sommerfeld-io/docker-images.git
+      start_path: docs
     - url: https://github.com/sebastian-sommerfeld-io/infrastructure.git
       start_path: docs
     - url: https://github.com/sebastian-sommerfeld-io/playgrounds.git
